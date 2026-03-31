@@ -22,32 +22,21 @@ const router = createRouter({
 });
 
 router.beforeEach((to) => {
-  const authStore = useAuthStore();
-  const adminStore = useAdminStore();
-
-  // 管理员路由守卫
-  if (to.meta.requiresAdmin) {
-    if (!adminStore.token) {
-      return { name: "admin-login" };
+  try {
+    const authStore = useAuthStore();
+    const adminStore = useAdminStore();
+    if (to.meta.requiresAdmin) {
+      if (!adminStore.token) return { name: "admin-login" };
+      return true;
     }
+    if (to.name === "admin-login" && adminStore.token) return { name: "admin" };
+    if (to.meta.requiresAuth && !authStore.token) return { name: "login" };
+    if ((to.name === "login" || to.name === "register") && authStore.token) return { name: "workspace" };
+    return true;
+  } catch(e) {
+    console.error("路由守卫报错:", e);
     return true;
   }
-
-  // 已登录管理员访问 admin-login 跳走
-  if (to.name === "admin-login" && adminStore.token) {
-    return { name: "admin" };
-  }
-
-  // 普通用户路由守卫
-  if (to.meta.requiresAuth && !authStore.token) {
-    return { name: "login" };
-  }
-
-  if ((to.name === "login" || to.name === "register") && authStore.token) {
-    return { name: "workspace" };
-  }
-
-  return true;
 });
 
 export default router;
