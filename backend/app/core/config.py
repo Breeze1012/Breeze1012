@@ -20,6 +20,7 @@ class Settings(BaseSettings):
     anthropic_max_tokens: int = 4096
     anthropic_temperature: float = 0.4
     max_upload_size_mb: int = 10
+    admin_password: str = ""
 
     @field_validator("database_url", mode="before")
     @classmethod

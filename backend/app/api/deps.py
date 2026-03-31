@@ -32,3 +32,23 @@ def get_current_user(
 
     return user
 
+
+admin_security = HTTPBearer()
+
+
+def get_admin_user(
+    credentials: HTTPAuthorizationCredentials = Depends(admin_security),
+) -> str:
+    token = credentials.credentials
+
+    try:
+        payload = jwt.decode(token, settings.secret_key, algorithms=["HS256"])
+        role = payload.get("role")
+        if role != "admin":
+            raise ValueError("not admin")
+    except (JWTError, TypeError, ValueError):
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN, detail="无管理员权限"
+        )
+
+    return "admin"

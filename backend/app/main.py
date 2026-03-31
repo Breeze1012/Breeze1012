@@ -2,7 +2,7 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from sqlalchemy.exc import ProgrammingError
 
-from app.api.routes import auth, history, rewrite
+from app.api.routes import admin, auth, history, rewrite
 from app.core.config import settings
 from app.db.base import Base
 from app.db.session import engine
@@ -35,6 +35,8 @@ app.include_router(rewrite.router, prefix="/rewrite", tags=["rewrite"])
 app.include_router(rewrite.router, prefix="/api/rewrite", tags=["rewrite"])
 app.include_router(history.router, prefix="/history", tags=["history"])
 app.include_router(history.router, prefix="/api/history", tags=["history"])
+app.include_router(admin.router, prefix="/admin", tags=["admin"])
+app.include_router(admin.router, prefix="/api/admin", tags=["admin"])
 
 
 @app.get("/health")
