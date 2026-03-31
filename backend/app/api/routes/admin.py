@@ -16,7 +16,13 @@ router = APIRouter()
 @router.post("/login")
 def admin_login(body: dict):
     password = body.get("password", "")
-    if password != settings.admin_password or not settings.admin_password:
+    if not settings.admin_password:
+        raise HTTPException(
+            status_code=status.HTTP_503_SERVICE_UNAVAILABLE,
+            detail="管理员密码未配置，请先设置 ADMIN_PASSWORD",
+        )
+
+    if password != settings.admin_password:
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
             detail="管理员密码错误",

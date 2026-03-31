@@ -77,6 +77,12 @@ npm run dev
 - 后端：`http://127.0.0.1:8000`
 - API 文档：`http://127.0.0.1:8000/docs`
 
+管理员后台登录还需要单独配置：
+
+```env
+ADMIN_PASSWORD=你的管理员密码
+```
+
 ## GitHub + Vercel 发布
 
 仓库已经调整为可直接从根目录部署到 Vercel：
@@ -93,6 +99,7 @@ npm run dev
 ```env
 DATABASE_URL=postgresql+psycopg://用户名:密码@你的公网Postgres地址:5432/rewrite_app?sslmode=require
 SECRET_KEY=一段足够长的随机字符串
+ADMIN_PASSWORD=你的管理员密码
 ANTHROPIC_API_KEY=你的AnthropicKey
 ANTHROPIC_MODEL=claude-sonnet-4-20250514
 ANTHROPIC_BASE_URL=https://api.anthropic.com
